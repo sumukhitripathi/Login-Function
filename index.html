@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flask Login App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <main class="page-shell">
+        <section class="card">
+            {% if logged_in %}
+            <div class="status-pill success">Authenticated</div>
+            <h1>Welcome, {{ username }}</h1>
+            <p class="subtitle">Your Flask session is active and the login flow is working correctly.</p>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                    <div class="flash {{ category }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <div class="dashboard-panel">
+                <h2>Dashboard</h2>
+                <p>You are now logged in to the application.</p>
+                <div class="info-row">
+                    <span>Username</span>
+                    <strong>{{ username }}</strong>
+                </div>
+                <div class="info-row">
+                    <span>Status</span>
+                    <strong>Session Active</strong>
+                </div>
+                <a class="button secondary" href="{{ url_for('logout') }}">Logout</a>
+            </div>
+            {% else %}
+            <div class="status-pill">Secure Login</div>
+            <h1>Sign in to continue</h1>
+            <p class="subtitle">Use one of the demo accounts to test the full Flask login functionality.</p>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                    <div class="flash {{ category }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <form id="loginForm" method="post" novalidate>
+                <div class="field">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" value="{{ username }}" placeholder="Enter your username">
+                    <div class="error" id="err-username">Username is required.</div>
+                </div>
+
+                <div class="field">
+                    <label for="password">Password</label>
+                    <div class="password-wrap">
+                        <input type="password" id="password" name="password" placeholder="Enter your password">
+                        <button type="button" id="togglePassword" class="toggle-password">Show</button>
+                    </div>
+                    <div class="error" id="err-password">Password is required.</div>
+                </div>
+
+                <button type="submit" class="button">Login</button>
+            </form>
+            {% endif %}
+        </section>
+    </main>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
